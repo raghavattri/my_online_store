@@ -1,0 +1,57 @@
+/* AdminDashboard.css */
+
+.admin-dashboard {
+    margin: 20px;
+  }
+  
+  .products-container {
+    margin-bottom: 20px;
+  }
+  
+  .products-container h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .product-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .product-item {
+    margin-bottom: 10px;
+  }
+  
+  .product-input {
+    margin-right: 10px;
+  }
+  
+  .delete-button {
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .add-product-container {
+    margin-top: 20px;
+  }
+  
+  .add-product-container h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .add-product-input {
+    margin-right: 10px;
+  }
+  
+  .add-product-button {
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  

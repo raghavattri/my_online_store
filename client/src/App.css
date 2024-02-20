@@ -1,0 +1,49 @@
+.app-container {
+  display: flex;
+}
+
+.filters-container {
+  flex: 3;
+  padding-left: 1rem;
+}
+
+.product-list-container {
+  flex: 7;
+}
+.filters-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.filters-container > div {
+  margin-right: 20px;
+}
+
+.filters-container h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  width: 80%;
+  margin-bottom: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+li:hover {
+  background-color: #e0e0e0;
+}
+
+
+
+
