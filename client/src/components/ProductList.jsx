@@ -8,16 +8,28 @@ function ProductList({ onAddToCart }) {
     const showItems = useSelector(state => state.cart.showItems);
     const totalProducts = useSelector(state => state.cart.totalProducts);
     const reduxCurrentCategory = useSelector(state => state.cart.currentCategory);
-
+    const categories = useSelector(state => state.cart.categories);
+    
     const [displayItems, setDisplayItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const dispatch = useDispatch();
-    useEffect(() => {  
-            dispatch(getData());
-          console.log(cartItems, showItems,totalProducts)
-          setDisplayItems(cartItems);
-      }, [ ]);
-      
+    useEffect(async () => {  
+
+        const fetchData = async () => {
+            try {
+                const actionResult = await dispatch(getData());
+                const data = actionResult.payload;
+                setDisplayItems(data); // Assuming payload is an array of items
+            } catch (error) {
+                // Handle error if necessary
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+      }, []);
+    
+    
 
     useEffect(() => {
         if (reduxCurrentCategory.toLowerCase() === 'all') {
@@ -31,13 +43,16 @@ function ProductList({ onAddToCart }) {
 
     const handleSearch = (event) => {
         const searchTerm = event.target.value;
+        console.log(searchTerm)
         setSearchTerm(searchTerm);
         if (searchTerm.length === 0) {
             setDisplayItems(cartItems);
         } else {
+            console.log(cartItems)
             let filteredProducts = cartItems.filter(product =>
-                product.title.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+                product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );  
+            console.log(filteredProducts)          
             setDisplayItems(filteredProducts);
         }
     };

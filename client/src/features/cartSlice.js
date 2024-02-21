@@ -30,6 +30,16 @@ export const addProduct = createAsyncThunk("cart/addProduct", async (payload,{ r
   }
 })
 
+export const updateProduct = createAsyncThunk("cart/updateProduct", async ({id, finalData }, {rejectWithValue})=>{
+  try {
+    console.log(finalData)
+    const res = await API.patch(`/api/products/${id}`, finalData);
+    return res.data
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+})
+
 export const cartSlice = createSlice({
   name: 'cart',
   initialState: {
@@ -106,9 +116,12 @@ export const cartSlice = createSlice({
         state.availableColors = uniqueColors;
         state.totalProducts = action.payload.length;
         state.loading = false;
+        console.log(action.payload)
         state.showItems = action.payload.map(data =>{
           state.showItems.push(data);
+          return state.showItems
         })
+
       })
       .addCase(getData.rejected, (state, action) => {
         state.loading = false;
@@ -121,6 +134,16 @@ export const cartSlice = createSlice({
         console.log(action.payload);
       })
       .addCase(addProduct.rejected, (state, action)=>{
+        state.loading = false;
+      })
+      .addCase(updateProduct.pending, (state, action)=>{
+        state.loading =true
+      })
+      .addCase(updateProduct.fulfilled, (state, action)=>{
+        state.pending =false;
+        console.log(action.payload);
+      })
+      .addCase(updateProduct.rejected, (state, action)=>{
         state.loading = false;
       })
      }
