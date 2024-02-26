@@ -3,9 +3,10 @@ const router = express.Router();
 const productController = require('../controllers/productController');
 const { authMiddleware } = require('../middleware/authMiddleware');
 
-
+// Get all products
 router.get('/', productController.getProducts);
 
+// Get a single product
 router.get('/:id', productController.getProductById);
 
 // Create a new product

@@ -8,24 +8,23 @@ function ProductList({ onAddToCart }) {
     const showItems = useSelector(state => state.cart.showItems);
     const totalProducts = useSelector(state => state.cart.totalProducts);
     const reduxCurrentCategory = useSelector(state => state.cart.currentCategory);
-
+    const loggedin = useSelector(state => state.auth.loggedIn);
+    
     const [displayItems, setDisplayItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const dispatch = useDispatch();
-    useEffect(() => {  
-            dispatch(getData());
-          console.log(cartItems, showItems,totalProducts)
-          setDisplayItems(cartItems);
-      }, [ ]);
-      
 
+    useEffect(()=>{
+        dispatch(getData());
+        console.log("inside productList",loggedin)
+    }, [])
+    
+    useEffect( () => {  
+        setDisplayItems(cartItems);
+      }, [totalProducts]);
+    
     useEffect(() => {
-        if (reduxCurrentCategory.toLowerCase() === 'all') {
             setDisplayItems(showItems);
-        } else {
-            setDisplayItems(showItems);
-            console.log(displayItems)
-        }
     }, [reduxCurrentCategory])
 
 
@@ -36,8 +35,8 @@ function ProductList({ onAddToCart }) {
             setDisplayItems(cartItems);
         } else {
             let filteredProducts = cartItems.filter(product =>
-                product.title.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+                product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );        
             setDisplayItems(filteredProducts);
         }
     };
@@ -55,7 +54,7 @@ function ProductList({ onAddToCart }) {
             />
             <div className="product-grid">
                 {displayItems.map(product => (
-                    <div key={product.id} className="product-card">
+                    <div key={product._id} className="product-card">
                         <img src={product.imageUrl} alt={product.name} className="product-image" />
                         <div className="product-details">
                             <h3 className="product-title">{product.name}</h3>

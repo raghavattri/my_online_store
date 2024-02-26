@@ -17,11 +17,7 @@ export const login = createAsyncThunk('auth/login', async (
   { username, password, navigate }, { rejectWithValue }) => {
   try {
     const response = await axios.post("http://localhost:5000/api/users/login", { username, password });
-    if(response.data.user === 'admin'){
-      navigate("/admin")
-    }else{
-      navigate("/")
-    }
+    
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data.message);
@@ -39,7 +35,9 @@ const authSlice = createSlice({
     isAdmin: false
   },
   reducers: {
-
+    logout: (state, action)=>{
+      state.loggedIn = !state.loggedIn;
+    }
   },
   extraReducers: builder => {
     builder
@@ -74,6 +72,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { } = authSlice.actions;
+export const { logout} = authSlice.actions;
 export default authSlice.reducer;
 

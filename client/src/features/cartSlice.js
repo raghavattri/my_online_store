@@ -30,6 +30,25 @@ export const addProduct = createAsyncThunk("cart/addProduct", async (payload,{ r
   }
 })
 
+export const updateProduct = createAsyncThunk("cart/updateProduct", async ({id, finalData }, {rejectWithValue})=>{
+  try {
+    console.log(finalData)
+    const res = await API.patch(`/api/products/${id}`, finalData);
+    return res.data
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+})
+
+export const deleteProduct = createAsyncThunk("cart/deleteProduct", async (id, {rejectWithValue})=>{
+  try{
+    console.log(id)
+    const res = await API.delete(`/api/products/${id}`);
+    return res.data;
+  }catch(error){
+    return rejectWithValue(error.response.data);
+  }
+})
 export const cartSlice = createSlice({
   name: 'cart',
   initialState: {
@@ -64,6 +83,12 @@ export const cartSlice = createSlice({
         
       }
       state.showItems = filteredProducts;
+    },
+
+    resetFilters: (state, action) =>{
+      state.currentCategory= 'all',
+      state.showItems=[];
+      state.showItems = [...state.items];
     },
 
   },
@@ -106,9 +131,12 @@ export const cartSlice = createSlice({
         state.availableColors = uniqueColors;
         state.totalProducts = action.payload.length;
         state.loading = false;
+        state.showItems = [];
         state.showItems = action.payload.map(data =>{
           state.showItems.push(data);
+          return state.showItems
         })
+
       })
       .addCase(getData.rejected, (state, action) => {
         state.loading = false;
@@ -118,14 +146,68 @@ export const cartSlice = createSlice({
       })
       .addCase(addProduct.fulfilled, (state, action)=>{
         state.pending =false;
-        console.log(action.payload);
       })
       .addCase(addProduct.rejected, (state, action)=>{
+        state.loading = false;
+      })
+      .addCase(updateProduct.pending, (state, action)=>{
+        state.loading =true
+      })
+      .addCase(updateProduct.fulfilled, (state, action)=>{
+        state.pending =false;
+        console.log(action.payload);
+      })
+      .addCase(updateProduct.rejected, (state, action)=>{
+        state.loading = false;
+      })
+      .addCase(deleteProduct.pending, (state, action)=>{
+        state.loading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action)=>{
+        state.items = action.payload;
+        
+        const uniqueCategories = action.payload.reduce((categories, product) => {
+          if (product.category) {
+            const categoryIndex = categories.findIndex(cat => cat.name === product.category.toLowerCase());
+            if (categoryIndex !== -1) {
+              categories[categoryIndex].number++;
+            } else {
+              categories.push({ name: product.category.toLowerCase(), number: 1 });
+            }
+          }
+          return categories;
+        }, []);
+    
+        const uniqueColors = action.payload.reduce((availableColors, product) => {
+          product.variants.forEach(variant => {
+            if (variant.color) {
+              const colorIndex = availableColors.findIndex(col => col.name === variant.color.toLowerCase());
+              if (colorIndex !== -1) {
+                availableColors[colorIndex].number++;
+              } else {
+                availableColors.push({ name: variant.color.toLowerCase(), number: 1 });
+              }
+            }
+          });
+          return availableColors;
+        }, []);
+        
+        state.categories = uniqueCategories;
+        state.availableColors = uniqueColors;
+        state.totalProducts = action.payload.length;
+        state.loading = false;
+        state.showItems = [];
+        state.showItems = action.payload.map(data =>{
+          state.showItems.push(data);
+          return state.showItems
+        })
+      })
+      .addCase(deleteProduct.rejected, (state, action)=>{
         state.loading = false;
       })
      }
 });
 
-export const { getInitialData, updateList } = cartSlice.actions;
+export const { getInitialData, updateList, resetFilters } = cartSlice.actions;
 
 export default cartSlice.reducer;
