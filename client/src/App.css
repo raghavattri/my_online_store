@@ -4,6 +4,8 @@
   font-family: "Poppins", sans-serif;
   font-weight: 400;
   font-style: normal;
+  margin: 0;
+  
 }
 
 .app-container {
@@ -11,46 +13,62 @@
 }
 
 .filters-container {
-  flex: 3;
+  flex: 1.4;
   padding-left: 1rem;
+  background-color: #90A699;
 }
 
 .product-list-container {
-  flex: 7;
+  flex: 8.6;
 }
 
 .filters-container {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .filters-container>div {
   margin-right: 20px;
+  padding-top: 1.5rem;
+  padding-left: 1rem;
 }
 
 .filters-container h2 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: #333;
+  margin-bottom: 16px;
+  font-size: 22px;
+  color: white; 
+  font-weight: 500;
 }
 
 ul {
-  padding: 0;
+  padding: 0 0 2rem 0 ;
 }
 
-li {
-  padding: 8px 12px;
-  border-radius: 4px;
-  background-color: #f0f0f0;
+.list {
   width: 80%;
-  margin-bottom: 6px;
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  list-style:none;
+  text-transform: capitalize;
+  color: rgb(44, 43, 43);
+  transition: color .1s ease-in;
 }
-
-li:hover {
-  background-color: #e0e0e0;
+.list:hover{
+  color: white;
+}
+.reset-filters{
+  color: #90A699;
+  background-color: white;
+  padding: .4rem .8rem;
+  border: none;
+  border-radius: .6rem;
+}
+.reset-filters:hover{
+  cursor: pointer;
+  border: 1.2px solid white;
+  background-color: #90A699;
+  color: white;
 }
 
 
@@ -62,7 +80,7 @@ li:hover {
   gap:2rem
 }
 .admin-all-products{
-  flex: 8;
+  flex: 7.5;
 }
 
 .admin-products-list{
@@ -71,13 +89,22 @@ li:hover {
   gap: 1.5rem;
 }
 .admin-add-product{
-  flex: 2;
+  flex: 2.5;
   display: flex;
   flex-direction: column;
   gap:1.5rem
 }
-.admin-dashboard h2{
-  color:blueviolet
+.admin-logout-btn{
+  color: white;
+  border:none;
+  border-radius: .6rem;
+  padding: .4rem .8rem;
+  background-color: rgb(217, 75, 75);
+}
+.admin-logout-btn:hover{
+  color: rgb(217, 75, 75);
+  cursor: pointer;
+  background-color: white;
 }
 .admin-product-data {
   display: flex;

@@ -61,7 +61,8 @@ exports.deleteProduct = async (req, res) => {
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json({ message: 'Product deleted' });
+    const products = await Product.find();
+    res.json(products);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

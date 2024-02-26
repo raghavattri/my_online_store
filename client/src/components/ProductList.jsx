@@ -8,51 +8,35 @@ function ProductList({ onAddToCart }) {
     const showItems = useSelector(state => state.cart.showItems);
     const totalProducts = useSelector(state => state.cart.totalProducts);
     const reduxCurrentCategory = useSelector(state => state.cart.currentCategory);
-    const categories = useSelector(state => state.cart.categories);
+    const loggedin = useSelector(state => state.auth.loggedIn);
     
     const [displayItems, setDisplayItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const dispatch = useDispatch();
-    useEffect(async () => {  
 
-        const fetchData = async () => {
-            try {
-                const actionResult = await dispatch(getData());
-                const data = actionResult.payload;
-                setDisplayItems(data); // Assuming payload is an array of items
-            } catch (error) {
-                // Handle error if necessary
-                console.error('Error fetching data:', error);
-            }
-        };
+    useEffect(()=>{
+        dispatch(getData());
+        console.log("inside productList",loggedin)
+    }, [])
     
-        fetchData();
-      }, []);
+    useEffect( () => {  
+        setDisplayItems(cartItems);
+      }, [totalProducts]);
     
-    
-
     useEffect(() => {
-        if (reduxCurrentCategory.toLowerCase() === 'all') {
             setDisplayItems(showItems);
-        } else {
-            setDisplayItems(showItems);
-            console.log(displayItems)
-        }
     }, [reduxCurrentCategory])
 
 
     const handleSearch = (event) => {
         const searchTerm = event.target.value;
-        console.log(searchTerm)
         setSearchTerm(searchTerm);
         if (searchTerm.length === 0) {
             setDisplayItems(cartItems);
         } else {
-            console.log(cartItems)
             let filteredProducts = cartItems.filter(product =>
                 product.name && product.name.toLowerCase().includes(searchTerm.toLowerCase())
-            );  
-            console.log(filteredProducts)          
+            );        
             setDisplayItems(filteredProducts);
         }
     };
@@ -70,7 +54,7 @@ function ProductList({ onAddToCart }) {
             />
             <div className="product-grid">
                 {displayItems.map(product => (
-                    <div key={product.id} className="product-card">
+                    <div key={product._id} className="product-card">
                         <img src={product.imageUrl} alt={product.name} className="product-image" />
                         <div className="product-details">
                             <h3 className="product-title">{product.name}</h3>
